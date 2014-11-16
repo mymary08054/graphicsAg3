@@ -156,29 +156,34 @@ Point3D RayScene::GetColor(Ray3D ray, int rDepth, Point3D cLimit) {
 
 void RayMaterial::drawOpenGL(void) {
 
-    //Background color
+//Background color
     //glClearColor(0,0,0,1);
-    /////////////////////
+    ///////////////////// 
+    
     GLfloat matDiffuse[] = {diffuse[0], diffuse[1], diffuse[2]};
 	GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
 	GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
 	GLfloat matAmbient[] = {ambient[0], ambient[1], ambient[2]};
 	GLfloat matShiny[] = {specularFallOff};
-    //GLfloat matShiny = 100;
-
+    //GLfloat matShinyy = 100;
+/*
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_EMISSION, matEmissive);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);*/
 
-    /*glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmissive);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-    glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShiny);*/
+    glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShinyy);
   
+  ///////////////////////////////		
+    //glClear(GL_COLOR_BUFFER_BIT );
+    //glFlush();
+    //////////////////////////////   
   
 /*	glEnable(GL_TEXTURE_2D);
 		if (tex != NULL) {
@@ -188,10 +193,7 @@ void RayMaterial::drawOpenGL(void) {
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);*/
 	
-	///////////////////////////////		
-    //glClear(GL_COLOR_BUFFER_BIT );
-    //glFlush();
-    //////////////////////////////
+	
 			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
 //}
 }

@@ -113,32 +113,33 @@ int StaticRayGroup::set(void) {
 //////////////////
 int RayGroup::getOpenGLCallList(void) {
         if(sNum>0){
-		GLuint g = glGenLists(1);
-		glNewList(g, GL_COMPILE);
-		drawOpenGL(-1);
+		GLuint displayList = glGenLists(1); //display list
+		glNewList(displayList, GL_COMPILE);
+		drawOpenGL(-1); //store group in displaylist
 		glEndList();
-		return g;
+		return displayList;
 	}
 	else{
 		return 0;
 	}
-	return 0;
 }
 
 #define MATRIX_SIZE 4
 
 int RayGroup::drawOpenGL(int materialIndex) {
-if (openGLCallListID == 0) {
+
+		/*
+		for (int i = 0; i < sNum; i++) {
+			shapes[i]->drawOpenGL(materialIndex);
+		}
+        return -1;*/
+
+    if (openGLCallListID == 0) {
 		Matrix4D transMatrix = getMatrix();
-		
-		//fMatrix holds the transformation matrix
-        float fMatrix [MATRIX_SIZE*MATRIX_SIZE];
-        int count = 0;
-        for(int i = 0; i < MATRIX_SIZE; i++) {
-            for(int j = 0; j < MATRIX_SIZE; j++) {
-                fMatrix[count++] = transMatrix(i,j);
-            }
-        }
+		float fMatrix[] = {transMatrix(0,0), transMatrix(0,1), transMatrix(0,2), transMatrix(0,3),
+						   transMatrix(1,0), transMatrix(1,1), transMatrix(1,2), transMatrix(1,3),
+						   transMatrix(2,0), transMatrix(2,1), transMatrix(2,2), transMatrix(2,3),
+						   transMatrix(3,0), transMatrix(3,1), transMatrix(3,2), transMatrix(3,3)};
 
 		GLint vp[4];
 		glGetIntegerv(GL_VIEWPORT, vp);
@@ -150,7 +151,7 @@ if (openGLCallListID == 0) {
 		jitMatrix[3][0] = 0.9; jitMatrix[3][1] = 0.3;
 		jitMatrix[4][0] = 0.1; jitMatrix[4][1] = 0.7;
 	
-		glClear(GL_ACCUM_BUFFER_BIT);
+		//glClear(GL_ACCUM_BUFFER_BIT);
 		int jitNum = 1;
 		for (int j = 0; j < jitNum; j++) {		
 			for (int i = 0; i < sNum; i++) {
@@ -163,12 +164,13 @@ if (openGLCallListID == 0) {
 				glPopMatrix();
 			}
 		}
-		glAccum(GL_RETURN, 1.0);
+		//glAccum(GL_RETURN, 1.0);
 	}
 	else{
 	glCallList(openGLCallListID);
 	}
-        return -1;
+	return -1;
+
 }
 
 /////////////////////
