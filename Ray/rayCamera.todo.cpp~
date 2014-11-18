@@ -8,8 +8,6 @@
 // OpenGL stuff //
 //////////////////
 void RayCamera::drawOpenGL(void){
-    //glMatrixMode(GL_MODELVIEW);
-	//glLoadIdentity();
     gluLookAt(position[0],position[1],position[2],direction[0],direction[1],direction[2],up[0],up[1],up[2]);
 }
 void RayCamera::rotateUp(Point3D center,float angle){

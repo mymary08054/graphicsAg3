@@ -1,5 +1,21 @@
-
 ./Assignment2 --in test.ray --width 500 --height 500 --cplx 100
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#group_begin
+	2.0 0.0 0.0 0.0
+	0.0 1.0 0.0 0.0
+	0.0 0.0 1.0 0.0
+	0.0 0.0 0.0 1.0
+	#ray_file_instance 0
+#group_end
+
+#group_begin
+	scalex 0.0 0.0 transx
+	0.0 scaley 0.0 0.0
+	0.0 0.0 scalez 0.0
+	0.0 0.0 0.0 1.0
+	#ray_file_instance 0
+#group_end
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The drawShape runs the correct number of times
 the coordinates are correct
