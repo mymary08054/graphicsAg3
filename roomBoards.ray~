@@ -1,0 +1,69 @@
+#texture_num 1
+#texture sample.jpg
+#material_num 1
+#material
+	0.0 0.0 0.0
+	0.3 0.3 0.3
+	0.1 0.1 0.5
+	1.0 1.0 1.0 100
+	0.0 0.0 0.0
+	1.05
+	-1
+	!!
+#vertex_num 8
+#vertex
+	-1  0  1
+	 1  1  -1
+	 0  0
+#vertex
+	 1  0  1
+	 -1  1  -1
+	 0  0
+#vertex
+	 1  0 -1
+	 -1  1  1
+	 0  0
+#vertex
+	-1  0 -1
+	 1  1  1
+	 0  0
+#vertex
+	-1  1  1
+	 1  -1  -1
+	 0  0
+#vertex
+	 1  1  1
+	 -1  -1  -1
+	 0  0
+#vertex
+	 1  1  -1
+	 -1  -1  1
+	 0  0
+#vertex
+	-1  1 -1
+	 1  -1  1
+	 0  0
+#shape_triangle 0
+	0 1 2
+#shape_triangle 0
+	0 2 3
+
+#shape_triangle 0
+	0 5 4
+#shape_triangle 0
+	0 1 5
+
+#shape_triangle 0
+	0 7 4
+#shape_triangle 0
+	0 3 7
+
+#shape_triangle 0
+	6 2 1
+#shape_triangle 0
+	6 1 5
+
+#shape_triangle 0
+	6 7 3
+#shape_triangle 0
+	6 3 2

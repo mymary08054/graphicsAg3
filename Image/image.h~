@@ -85,7 +85,7 @@ public:
 	  * of noise that should be added. The actual amount of noise added is in the range [-noise,noise].
 	  * The method returns 1 if it has been implemented.
 	  */
-	Pixel32* getPixels(void) const;
+	/home/mary/Documents/Graphics/previous asgs/assignment1.myen3/Image/image.h
 	
 	int AddRandomNoise(const float& noise,Image32& outputImage) const;
 

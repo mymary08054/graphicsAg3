@@ -13,6 +13,15 @@ void RayCamera::drawOpenGL(void){
 void RayCamera::rotateUp(Point3D center,float angle){
 }
 void RayCamera::rotateRight(Point3D center,float angle){
+	float theta = acosf(Point3D(1, 0, 0).dot(up.unit()));
+	float gamma = acosf(Point3D(0, 1, 0).dot(up.unit()));
+	glTranslatef(-center[0]+position[0], -center[1]+position[1], -center[2]+position[2]);
+	glRotatef(theta, 1, 0, 0);
+	glRotatef(gamma, 0, 1, 0);
+	glRotatef(angle*180/PI, right[0], right[1], right[2]);
+	glRotatef(-theta, 1, 0, 0);
+	glRotatef(-gamma, 0, 1, 0);
+	glTranslatef(center[0]-position[0], center[1]-position[1], center[2]-position[2]);
 }
 void RayCamera::moveForward(float dist){
     position -= direction*dist; //move in direction

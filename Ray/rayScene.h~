@@ -153,7 +153,7 @@ public:
 	class RayLight** lights;
 	/** The number of lights in the scene */
 	int lightNum;
-	bool lightsOn;
+	
 	/** The root of the scene-graph */
 	class StaticRayGroup* group;
 

@@ -112,7 +112,8 @@ Image/image.todo.o: /usr/include/features.h /usr/include/stdc-predef.h
 Image/image.todo.o: /usr/include/libio.h /usr/include/_G_config.h
 Image/image.todo.o: /usr/include/wchar.h Image/lineSegments.h
 Image/image.todo.o: /usr/include/stdlib.h /usr/include/alloca.h
-Image/image.todo.o: /usr/include/math.h
+Image/image.todo.o: /usr/include/math.h /usr/include/time.h
+Image/image.todo.o: /usr/include/xlocale.h
 Image/jpeg.o: Image/jpeg.h Image/image.h /usr/include/stdio.h
 Image/jpeg.o: /usr/include/features.h /usr/include/stdc-predef.h
 Image/jpeg.o: /usr/include/libio.h /usr/include/_G_config.h

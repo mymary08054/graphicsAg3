@@ -113,14 +113,31 @@ int RayTriangle::drawOpenGL(int materialIndex){
 		material->drawOpenGL();
 
     glBegin(GL_TRIANGLES);
+    glTexCoord2f(0,0);
+    Point3D pt = v[0]->position;
+    int i = 0;
+    glNormal3d(v[i]->normal[0],v[i]->normal[1],v[i]->normal[2]);
+    glVertex3f(pt[0],pt[1],pt[2]);
     
-    for (int i = 0; i < 3; i++){
+    glTexCoord2f(1,0);
+    pt = v[1]->position;
+    i = 1;
+    glNormal3d(v[1]->normal[0],v[i]->normal[1],v[i]->normal[2]);
+    glVertex3f(pt[0],pt[1],pt[2]);
+    
+    glTexCoord2f(1,1);
+    pt = v[2]->position;
+    i = 2;
+    glNormal3d(v[2]->normal[0],v[i]->normal[1],v[i]->normal[2]);
+    glVertex3f(pt[0],pt[1],pt[2]);
+    /*for (int i = 0; i < 3; i++){
         
         Point3D pt = v[i]->position;
+        
         glNormal3d(v[i]->normal[0],v[i]->normal[1],v[i]->normal[2]);
         //pt.printout();
         glVertex3f(pt[0],pt[1],pt[2]);
-    }
+    }*/
     glEnd();
     
     //This shape will appear

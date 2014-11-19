@@ -19,15 +19,29 @@ Codename:	trusty<br>
 Number of late days used: One <br>
 </p>
 ========================<br>
-<b>Demonstration Image</b>
+<b>Demonstration Image</b><br>
 ========================<br>
 <br>
-
+<b>Implemented</b><br>
 (1) Implement the RayCamera::drawOpenGL (in Ray/rayCamera.todo.cpp) to draw the camera.
+<br>
+<br>
+<b>Implemented</b><br>
 (1) Implement the RayGroup::drawOpenGL (in Ray/rayGroup.todo.cpp) to draw the scene-graph nodes. For now ignore the local transformation information and simply draw all the RayShapes associated to the RayGroup.
+<br>
+<br>
+<b>Implemented</b><br>
 (1) Implement the RaySphere::drawOpenGL (in Ray/raySphere.todo.cpp) method to draw a sphere at the appropriate tesselation. For now, you can ignore the input materialIndex parameter and have the method return -1. (You may want to consider using the gluSphere function from the GLU library to assist you with this.)
+<br>
+<br>
+<b>Implemented</b><br>
 (2) Implement the RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) method to draw a triangle with per-vertex normals. For now, ignore the texture coordinates and the input materialIndex parameter, and have the method return -1.
+<br>
+<br>
+<b>Implemented</b><br>
 (2) Impelement the RayMaterial::drawOpenGL (in Ray/rayScene.todo.cpp) method to draw the material properties.
+<br>
+<br>
 (3) To draw the light sources, implement:
 RayDirectionalLight::drawOpenGL (in Ray/rayDirectionalLight.todo.cpp);
 RayPointLight::drawOpenGL (in Ray/rayPointLight.todo.cpp); and
@@ -35,42 +49,88 @@ RaySpotLight::drawOpenGL (in Ray/raySpotLight.todo.cpp)
 The input index parameter specifies which of the OpenGL lights you are using and should be used for specifying the light parameters in the RayLight::drawOpenGL method:
 glLightfv(GL_LIGHT0+index, ...);
 glEnable(GL_LIGHT0+index);
+<br>
+<br>
 (2) Modify the implementation of RayGroup::drawOpenGL (in Ray/rayGroup.todo.cpp) to take into account the local transformation returned by the call: RayGroup::getMatrix. You can do this by pushing the appropriate matrix onto the stack prior to rendering and then popping it off after you are done.
+<br>
+<br>
+<b>Implemented</b><br>
 (2) Accelerate OpenGL rendering by using call-lists. To do this you will have to:
 Implement RayGroup::getOpenGLCallList (in Ray/rayGroup.todo.cpp) to generate a single call list for all of the children of the RayGroup.
 Modify the implementation of RayGroup::drawOpenGL (in Ray/rayGroup.todo.cpp) so that if the value of openGLCallListID is zero, you simply draw the shapes as you had previously. Otherwise, invoke the OpenGL command to draw the call-list using the call-list ID. (Note that the initialization will take care of actually calling RayGroup::getOpenGLCallList so you don't have to.)
+<br>
+<br>
 (3) Implement triangle texture mapping. To do this you will have to:
 Modify the implementation of RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) to specify the texture coordinates prior to specifying the vertex positions.
 Modify the implementation of RayMaterial::drawOpenGL (in Ray/RayScene.todo.cpp) method to enable and bind the texture if it is present.
 Modify the implementation of RayTexture::setUpOpenGL (in Ray/RayScene.todo.cpp) method to generate the texture handle.
+<br>
+<br>
+<b>Implemented</b><br>
 (1) Implement the RayBox::drawOpenGL (in Ray/rayBox.todo.cpp) method to draw a box.
+<br>
+<br>
+<b>Implemented</b><br>
 (1) Implement the RayCylinder::drawOpenGL (in Ray/rayCylinder.todo.cpp) method to draw a cylinder with bottom and top caps at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
+<br>
+<br>
+<b>Implemented</b><br>
 (1) Implement the RayCone::drawOpenGL (in Ray/rayCone.todo.cpp) method to draw a cone capped off at the bottom at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
+<br>
+<br>
+<b>Implemented</b><br>
 (2) Implement mouse control to facilitate moving about the interior of the scene. As a minimum, you should implement a crystal-ball system in which dragging the left mouse button rotates the viewer around the model, rotating either about the up-direction or the right-direction. To do this you will have to modify:
+<br>
 RayCamera::rotateUp (in Ray/rayCamera.todo.cpp) to implement a rotation of angle degrees, around the up-axis, about the point center.
+<br>
 RayCamera::rotateRight (in Ray/rayCamera.todo.cpp) to implement a rotation of angle degrees, around the right-axis, about the point center.
+<br>
+<br>
 (2) Implement full scene anti-aliasing using the accumulation buffer. Hint: See the OpenGL Programming Guide for information about jittering.
+<br>
+<br>
 Generate a .ray file describing a room scene with:
+<br>
 (1) Four walls, a floor and ceiling.
+<br>
 (3) A table, several chairs, etc. You may choose more interesting furnishings.
+<br>
 (1) At least one transparent surface, perhaps the table top.
+<br>
 (1) At least three texture mapped surfaces, each with a different texture.
+<br>
 (1) At least three point or spot light sources.
+<br>
 (2) A Luxo Jr. style lamp with keyboard and/or mouse controls for manipulating the joints of the lamp interactively while the spot light representing the bulb moves accordingly. Hint: see the robotic arm example in the OpenGL Programming Guide.
+<br>
 (2) A mirror. Hint: Reflect the world about the mirror and render it again through a stencil buffer.
+<br>
 (2) Shadows on at least one surface (such as the floor or table). Hint: See the OpenGL Programming Guide for the transformation which renders objects onto a plane.
+<br>
 (2) An object that responds to user mouse clicks (such as a light switch which turns on/off a light when clicked on by the user).
+<br>
 (1) In general, making a call to OpenGL's glMaterial* commands can be somewhat expensive. Rather than calling these functions before you draw every RayShape, modify the RayShape::drawOpenGL of the different subclasses so that:
 You first test if the if the index of the material associated to the primitive is the same as the input materialIndex paramter and only call the RayMaterial::drawOpenGL method if they differ.
+<br>
+<br>
 Return the index of the last material used.
 OpenGL Shading Language (See the specification for more details.)
+<br>
 (2) Write vertex and fragment shaders that implement the traditional fixed pipeline with Gouraud Shading.
+<br>
 (2) Write vertex and fragment shaders that implement the traditional fixed pipeline with Phong Shading.
+<br>
 (2) Adapt your Phong shader to support bump mapping.
+<br>
 (2) Modify the OpenGL renderer to allow the user to ray-trace the scene from the same perspective as the RayCamera.
-
+<br>
+<br>
 The assignment will be graded out of 30 points. In addition to implementing these features, there are several other ways to get more points:
+<br>
 (1) Submitting one or more images for the art contest.
+<br>
 (1) Submitting one or more .ray files for the art contest.
-(1) Submitting one or more shader files for the art contest. You may consult online resources (make sure to do reference) but the shaders must be your own creation.
+<br>
+(1) Submitting one or more shader files for the art contest.
+<br> You may consult online resources (make sure to do reference) but the shaders must be your own creation.
 

@@ -105,6 +105,7 @@ BoundingBox3D RaySphere::setBoundingBox(void) {
 //////////////////
 // OpenGL stuff //
 //////////////////
+#define SPHERE_SUBDIVISIONS 360
 int RaySphere::drawOpenGL(int materialIndex) {
     int mat = material->index;
 	if (mat != materialIndex)

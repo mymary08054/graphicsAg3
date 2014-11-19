@@ -1,202 +1,244 @@
 #include "rayScene.h"
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 #include <math.h>
-
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 ///////////////////////
 // Ray-tracing stuff //
 ///////////////////////
 
-void printPoint(Point3D p) {
-        printf("%f\t%f\t%f\n", p[0], p[1], p[2]);
-}
-
 Point3D RayScene::Reflect(Point3D v, Point3D n) {
-    Point3D Reflection = v-(n*2*(v.dot(n)));
-    return Reflection;
+	return (v - (n * (v.dot(n)) * 2)); //page 87 of Shirley
 }
 
 int RayScene::Refract(Point3D v, Point3D n, double ir, Point3D& refract) {
-    v = -(v);
-    if (n.dot(v) < 0) {
-            ir = 1 / ir;
-            n = n * -1;
-    }
-    double a = acos(v.dot(n));
-    double c = sin(a) / ir;
-    if (c > 1 || c < -1) {
-            return 0;
-    }
-    double b = asin(c);
-    refract = n * ((1 / ir)*cos(a)-cos(b))-v*(1/ir);
-    refract /= refract.length();
-    return 1;
+	v = v * -1;
+	if (n.dot(v) < 0) {
+		ir = 1 / ir;
+		n = n * -1;
+	}
+	if (sin(acos(v.dot(n))) / ir > 1 || sin(acos(v.dot(n))) / ir < -1)
+		return 0;
+	refract = n
+			* ((1 / ir) * cos(acos(v.dot(n)))
+					- cos(asin(sin(acos(v.dot(n))) / ir))) - v * (1 / ir);
+	refract /= refract.length();
+	return 1;
 }
 
 Ray3D RayScene::GetRay(RayCamera* camera, int i, int j, int width, int height) {
+	Ray3D ray;
+	Point3D p;
+	ray.position = camera->position;
+	p = camera->position
+			+ (camera->direction)
+			* (height / (2 * tan(camera->heightAngle / 2)))
+			+ (camera->up) * (j + .5 - (height / 2))
+			+ (camera->right) * (i + .5 - (width / 2));
+	ray.direction = (p - camera->position) / ((p - camera->position).length());
 
-    Point3D p0 = camera->position;
-    //pick arbitrary distance value from camera to
-    //view screen
-    double d = 1;
-    double a = (camera->heightAngle)/2;
-    Point3D up = camera->up;
-    Point3D dir = camera->direction;
-    Point3D right = camera->right;
+	return ray;
+	
+	//JITTER//
+	// Ray3D ray;
+	// ray.position = camera->position;
+	// float u = tan(camera->heightAngle/2.0);
+	// float r = camera->aspectRatio*u;
+	// float x = (float)rand();
+	// x /=(float)RAND_MAX;
+	// float y = (float)rand();
+	// y/=(float)RAND_MAX;
+	// float sR = ((float)i+x)/((float)width);
+	// float sU = ((float)j+y)/((float)height);
+	// ray.direction = camera->direction+(camera->right*(2.0*sR-1.0)*r)+(camera->up*(2.0*sU-1.0)*u);
 
-    //equations modified from in class notes
-    Point3D p1 = p0 + (dir * d) - (right * d * tan(a)) - (up * d * tan(a));
-    Point3D p2 = p0 + (dir * d) + (right * d * tan(a)) - (up * d * tan(a));
-    Point3D p3 = p0 + (dir * d) - (right * d * tan(a)) + (up * d * tan(a));
-    Point3D p4 = p0 + (dir * d) + (right * d * tan(a)) + (up * d * tan(a));
-    
-    //for each point on the screen
-    Point3D pij = p1 + (p2 - p1) * ((i + .5) / width) + (p3 - p1) * ((j + .5) / height);
+	// return ray;
 
-    Point3D raydir = pij - p0;
-    
-    //normalize
-    raydir /= raydir.length();
-
-    return Ray3D(p0, raydir);
 }
 
-bool t = true;
 Point3D RayScene::GetColor(Ray3D ray, int rDepth, Point3D cLimit) {
-        // Declare vars
-        Point3D color; //return value
-        double dist;
-        double var = 0.0001;
-        int shadow, numIntersections = 0;
-        RayIntersectionInfo iInfo;
-        Ray3D refractPT, reflectedRay;
-        Point3D reflect, reflectedColor, refractedColor;
-        
-        // run intersect to get dist to obj
-        dist = group->intersect(ray, iInfo, -1);
-        if (dist == -1) { //ray missed, return bg color
-                return background;
-        }
 
-        // Ambient & emissive
-        color = ambient * iInfo.material->ambient + iInfo.material->emissive;
-        if (ray.direction.dot(iInfo.normal) < 0) { //obj is front facing
-                /////////////////////////
-                //shadow & transparency//
-                ////////////////////////
-                for (int j = 0; j < this->lightNum; j++) {
-                        // Are we in shadow?
-                        shadow = this->lights[j]->isInShadow(iInfo, this->group,
-                                        numIntersections);
-                        // transparency
-                        Point3D transp = lights[j]->transparency(iInfo, group, cLimit);
+	/*	--------Slides Pseudocode----
+	 Point3D p(0,0,0);
+	 Ray3D reflect, refract;
+	 Intersection hit=FindIntersection(ray,scene);
+	 if (hit){
+	 p+=GetSurfaceColor(hit.position);
 
-                        color += this->lights[j]->getDiffuse(ray.position, iInfo) * transp;
-                        color += this->lights[j]->getSpecular(ray.position, iInfo) * transp;
-                }
+	 reflect.direction = Reflect(ray.direction, hit.normal);
+	 reflect.position = hit.position + reflect.direction*epsilon;
+	 if(rDepth>0 && hit.kSpec>cLimit){
+	 p+=GetColor(scene, reflect, depth-1, cutOff/hit.kSpec)*hit.kSpec;
+	 }
 
-                ///////////////
-                // reflection//
-                ///////////////
-                reflect = Reflect(ray.direction, iInfo.normal);
-                reflectedRay = Ray3D(iInfo.iCoordinate, reflect);
-                reflectedRay.position = reflectedRay(var);
-                if (rDepth > 0 && (iInfo.material->specular[0] > cLimit[0])
-                                && (iInfo.material->specular[1] > cLimit[1])
-                                && (iInfo.material->specular[2] > cLimit[2])) {
-                        // recurse getcolor to get reflections
-                        reflectedColor = GetColor(reflectedRay, rDepth - 1,
-                                        (cLimit / iInfo.material->specular));
-                        // prevent bg color from effecting reflections
-                        if (reflectedColor.p[0] == background.p[0]
-                                        && reflectedColor.p[1] == background.p[1]
-                                        && reflectedColor.p[2] == background.p[2]) {
-                                reflectedColor = Point3D();
-                        }
-                        // Add reflected colors
-                        reflectedColor *= iInfo.material->specular;
-                        color += reflectedColor;
-                }
-        }
-        //////////////
-        //refraction//
-        //////////////
-        if (this->Refract(ray.direction, iInfo.normal, iInfo.material->refind,
-                        refractPT.direction)) {
-                refractPT.position = iInfo.iCoordinate;
-                refractPT.position = refractPT(var);
-                refractedColor = this->GetColor(refractPT, rDepth - 1, cLimit);
-                if (refractedColor.p[0] == background.p[0]
-                                && refractedColor.p[1] == background.p[1]
-                                && refractedColor.p[2] == background.p[2]) {
-                        refractedColor = Point3D();
-                }
-                refractedColor *= iInfo.material->transparent;
-                color += refractedColor;
-        }
+	 refract.direction=Refract(ray.direction, hit.normal, hit.ir);
+	 refract.position = hit.position+refract.direction*epsilon;
+	 if(depth>0 && hit.kTran>cutOff){
+	 p+=GetColor(scene, refract, depth-1, cutOff/hit.kTran)*hit.kTran;
+	 }
+	 }
 
-        //bound the color value in case of outliers
-        for (int i = 0; i < 3; i++)
-                if (color.p[i] > 1)
-                        color.p[i] = 1;
+	 return p;
+	 */
+
+	RayIntersectionInfo iInfo = RayIntersectionInfo();
+	double intersect = group->intersect(ray, iInfo, -1);
+	Point3D diffuse = Point3D();
+	Point3D specular = Point3D();
+	Point3D reflectP = Point3D();
+	Point3D refractP = Point3D();
+	Point3D shadow = Point3D();
+	Point3D trans = Point3D();
+	Point3D texColor = Point3D();
+
+	Ray3D reflectR = Ray3D();
+	Ray3D refractR = Ray3D();
+	
+	texColor = Point3D(1, 1, 1);
+
+	if (intersect > 0) {
+
+	/* TEXTURE MAPPING */
+
+	// if (intersect < 0) {
+	// 	return Point3D(0, 0, 0);
+	// }
+
+	// else {
+	// 	if (iInfo.material->tex != 0) {
+	// 		Image32* tex = iInfo.material->tex->img;
+	// 		Pixel t = Pixel(
+	// 				tex->BilinearSample(iInfo.texCoordinate[0] * tex->width(),
+	// 						iInfo.texCoordinate[1] * tex->height()));
+	// 		texColor[0] = t.r;
+	// 		texColor[1] = t.r;
+	// 		texColor[2] = t.r;
+	// 	}
+
+		for (int i = 0; i < lightNum; i++) {
+			trans = lights[i]->transparency(iInfo, group, cLimit);
+			diffuse += lights[i]->getDiffuse(camera->position, iInfo)*trans;
+			specular += lights[i]->getSpecular(camera->position, iInfo)*trans;
+
+			/*			SHADOWS							*/
+			// if (lights[i]->isInShadow(iInfo, group, i) == 1)
+			// 	shadow += (diffuse + specular);
+		}
+
+		/* REFLECT */
+		if (iInfo.normal.dot(ray.direction) > 0) {
+			reflectR.direction = this->Reflect(ray.direction, iInfo.normal);
+			reflectR.direction = reflectR.direction.unit();
+			reflectR.position = iInfo.iCoordinate + reflectR.direction * RAYEPS;
+			if (rDepth > 0
+					&& (iInfo.material->specular.p[0] > cLimit.p[0]
+					                                             || iInfo.material->specular.p[1] > cLimit.p[1]
+					                                                                                         || iInfo.material->specular.p[2] > cLimit.p[2])) {
+				reflectP += iInfo.material->specular
+						* this->GetColor(reflectR, rDepth - 1,
+								cLimit / iInfo.material->specular);
+			}
+		}
+
+		/* REFRACT */
+		if (this->Refract(ray.direction, iInfo.normal, iInfo.material->refind,
+				refractR.direction) == 1) {
+			refractR.direction /= refractR.direction.length();
+			refractR.position = iInfo.iCoordinate + refractR.direction * RAYEPS;
+			refractP += iInfo.material->transparent
+					* this->GetColor(refractR, rDepth - 1, cLimit);
+			for (int i = 0; i <= 2; i++)
+				if (refractP.p[i] > 1)
+					refractP.p[i] = 1;
+			for (int i = 0; i <= 2; i++)
+				if (refractP.p[i] < 0)
+					refractP.p[i] = 0;
+		}
 
 
-        for (int i = 0; i < 3; i++)
-                if (color.p[i] < 0)
-                        color.p[i] = 0;
+		Point3D temp = iInfo.material->emissive
+				+ ambient * iInfo.material->ambient + diffuse + specular
+				+ reflectP + refractP;// + shadow;	//+texColor;
+		for (int i = 0; i <= 2; i++)
+			if (temp.p[i] > 1)
+				temp.p[i] = 1;
+		for (int i = 0; i <= 2; i++)
+			if (temp.p[i] < 0)
+				temp.p[i] = 0;
+		return temp;
+	}
 
-        return color;
+	if (ray.position[0] == camera->position[0]
+	                                        && ray.position[1] == camera->position[1]
+	                                                                               && ray.position[2] == camera->position[2])
+		return background;
+	else
+		return Point3D(0, 0, 0);
+
 }
 
-
+//////////////////
 // OpenGL stuff //
 //////////////////
-
 void RayMaterial::drawOpenGL(void) {
-
-//Background color
-    //glClearColor(0,0,0,1);
-    ///////////////////// 
-    
     GLfloat matDiffuse[] = {diffuse[0], diffuse[1], diffuse[2]};
-	GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
-	GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
-	GLfloat matAmbient[] = {ambient[0], ambient[1], ambient[2]};
-	GLfloat matShiny[] = {specularFallOff};
-    //GLfloat matShinyy = 100;
-/*
+    GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
+    GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
+    GLfloat matAmbient[] = {ambient[0], ambient[1], ambient[2]};
+    GLfloat matShiny[] = {specularFallOff};
+
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_EMISSION, matEmissive);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
-    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);*/
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);
 
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, matEmissive);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
-    glMateriali(GL_FRONT_AND_BACK, GL_SHININESS, matShinyy);
-  
-  ///////////////////////////////		
-    //glClear(GL_COLOR_BUFFER_BIT );
-    //glFlush();
-    //////////////////////////////   
-  
-/*	glEnable(GL_TEXTURE_2D);
+///////////Texture Stuff//////////////
+
+	glEnable(GL_TEXTURE_2D);
 		if (tex != NULL) {
 			(*tex).setUpOpenGL();
 			glBindTexture(GL_TEXTURE_2D,(*tex).openGLHandle);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);*/
-	
-	
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
-//}
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
+		}
 }
+/*
+void RayMaterial::turnOffLights(void) {
+    GLfloat lightsOffArray[] = {0,0,0};
+	GLfloat matDiffuse[] = {0,0,0};
+	GLfloat matSpecular[] = {0,0,0};
+	GLfloat matEmissive[] = {0,0,0};
+	GLfloat matAmbient[] = {0,0,0};
+	GLfloat matShiny[] = {specularFallOff};
+
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmissive);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);
+
+    //lightsOn = false;
+
+///////////Texture Stuff//////////////
+
+	glEnable(GL_TEXTURE_2D);
+		if (tex != NULL) {
+			(*tex).setUpOpenGL();
+			glBindTexture(GL_TEXTURE_2D,(*tex).openGLHandle);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
+		}
+}*/
+
 void RayTexture::setUpOpenGL(void) {
-    glGenTextures(1,&openGLHandle);
+	glGenTextures(1,&openGLHandle);
 }

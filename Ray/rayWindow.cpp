@@ -14,6 +14,7 @@ double RayWindow::radius;
 double RayWindow::frameRate;
 double RayWindow::frameCountStart;
 Point3D RayWindow::center;
+int lightNumStore = 0;
 
 /** This function prints out the state of the OpenGL error. */
 int RayWindow::PrintError(const int& showNoError){
@@ -162,7 +163,14 @@ void RayWindow::MotionFunction( int x, int y ){
 		scene->camera->moveRight(-radius/250*d[0]);
 		scene->camera->moveUp(radius/250*d[1]);
 	}
-
+    /*if(mouse.rightDown) {
+        if(scene->lightsOn) {
+            scene->lightsOn = false;
+        } else { //turn on lights
+            scene->drawOpenGL();
+            scene->lightsOn = true;
+        }
+    }*/
 	glutPostRedisplay();
 }
 /** This function is called when the mouse is moved moved but no buttons are depressed. */

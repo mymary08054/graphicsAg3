@@ -185,17 +185,19 @@ Point3D RayScene::GetColor(Ray3D ray, int rDepth, Point3D cLimit) {
 // OpenGL stuff //
 //////////////////
 void RayMaterial::drawOpenGL(void) {
-	GLfloat matDiffuse[] = {diffuse[0], diffuse[1], diffuse[2]};
-	GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
-	GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
-	GLfloat matAmbient[] = {ambient[0], ambient[1], ambient[2]};
-	GLfloat matShiny[] = {specularFallOff};
+    GLfloat matDiffuse[] = {diffuse[0], diffuse[1], diffuse[2]};
+    GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
+    GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
+    GLfloat matAmbient[] = {ambient[0], ambient[1], ambient[2]};
+    GLfloat matShiny[] = {specularFallOff};
 
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT, GL_EMISSION, matEmissive);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
     glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);
+
+///////////Texture Stuff//////////////
 
 	glEnable(GL_TEXTURE_2D);
 		if (tex != NULL) {
@@ -207,6 +209,36 @@ void RayMaterial::drawOpenGL(void) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
 		}
 }
+/*
+void RayMaterial::turnOffLights(void) {
+    GLfloat lightsOffArray[] = {0,0,0};
+	GLfloat matDiffuse[] = {0,0,0};
+	GLfloat matSpecular[] = {0,0,0};
+	GLfloat matEmissive[] = {0,0,0};
+	GLfloat matAmbient[] = {0,0,0};
+	GLfloat matShiny[] = {specularFallOff};
+
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT, GL_EMISSION, matEmissive);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+    glMaterialfv(GL_FRONT, GL_SHININESS, matShiny);
+
+    //lightsOn = false;
+
+///////////Texture Stuff//////////////
+
+	glEnable(GL_TEXTURE_2D);
+		if (tex != NULL) {
+			(*tex).setUpOpenGL();
+			glBindTexture(GL_TEXTURE_2D,(*tex).openGLHandle);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
+		}
+}*/
+
 void RayTexture::setUpOpenGL(void) {
 	glGenTextures(1,&openGLHandle);
 }

@@ -105,6 +105,7 @@ BoundingBox3D RaySphere::setBoundingBox(void) {
 //////////////////
 // OpenGL stuff //
 //////////////////
+#define SPHERE_SUBDIVISIONS 360
 int RaySphere::drawOpenGL(int materialIndex) {
     int mat = material->index;
 	if (mat != materialIndex)
@@ -113,7 +114,7 @@ int RaySphere::drawOpenGL(int materialIndex) {
 	glTranslatef(-center[0], -center[1], -center[2]);	
 
 	GLUquadricObj* quadObj = gluNewQuadric();
-	gluSphere(quadObj, radius, 360, 360);
+	gluSphere(quadObj, radius, SPHERE_SUBDIVISIONS, SPHERE_SUBDIVISIONS);
 	
 	return mat;
 }

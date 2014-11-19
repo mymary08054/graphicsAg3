@@ -28,7 +28,7 @@ int RayCone::drawOpenGL(int materialIndex){
 		//material->drawOpenGL();
 	
 	glPushMatrix();
-    glTranslatef(-center[0], -center[1]-height, -center[2]);	
+    glTranslatef(-center[0], -center[1]-height/2, -center[2]);	
     glRotatef(90.0f, -1.0f, 0.0f, 0.0f); //rotate about x axis
 	GLUquadricObj* quadObj = gluNewQuadric();
 	gluCylinder(quadObj, radius, 0, height, CONE_SUBDIVISIONS, CONE_SUBDIVISIONS);

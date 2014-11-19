@@ -17,54 +17,43 @@
 #group_end
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The drawShape runs the correct number of times
-the coordinates are correct
-the shapes after the 1st two do not appear
-running the coordinates again within the same method does make another poly appear
->>something is happening after the 2nd poly that stops the rest from appearing
-
-(2) Implement the RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) method to draw a triangle with per-vertex normals. For now, ignore the texture coordinates and the input materialIndex parameter, and have the method return -1.
+Right click to turn lights on or off....
+-first have it so that it recalls the scene but w/o the light propeerties...?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (3) Implement triangle texture mapping. To do this you will have to:
 Modify the implementation of RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) to specify the texture coordinates prior to specifying the vertex positions.
 Modify the implementation of RayMaterial::drawOpenGL (in Ray/RayScene.todo.cpp) method to enable and bind the texture if it is present.
 Modify the implementation of RayTexture::setUpOpenGL (in Ray/RayScene.todo.cpp) method to generate the texture handle.
 
-(1) Implement the RayBox::drawOpenGL (in Ray/rayBox.todo.cpp) method to draw a box.
-(1) Implement the RayCylinder::drawOpenGL (in Ray/rayCylinder.todo.cpp) method to draw a cylinder with bottom and top caps at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
-(1) Implement the RayCone::drawOpenGL (in Ray/rayCone.todo.cpp) method to draw a cone capped off at the bottom at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
-
-(2) Implement full scene anti-aliasing using the accumulation buffer. Hint: See the OpenGL Programming Guide for information about jittering.
-
 Generate a .ray file describing a room scene with:
     (1) Four walls, a floor and ceiling.
+    MAKE CRAPPY TILTED CEILING??
+    
     (3) A table, several chairs, etc. You may choose more interesting furnishings.
     (1) At least one transparent surface, perhaps the table top.
     (1) At least three texture mapped surfaces, each with a different texture.
-    (1) At least three point or spot light sources.
-    (2) A Luxo Jr. style lamp with keyboard and/or mouse controls for manipulating the joints of the lamp interactively while the spot light representing the bulb moves accordingly. Hint: see the robotic arm example in the OpenGL Programming Guide.
-    (2) A mirror. Hint: Reflect the world about the mirror and render it again through a stencil buffer.
-    (2) Shadows on at least one surface (such as the floor or table). Hint: See the OpenGL Programming Guide for the transformation which renders objects onto a plane.
+    (1) At least three point or spot light sources.YES
     (2) An object that responds to user mouse clicks (such as a light switch which turns on/off a light when clicked on by the user).
 
 
 =========
 CHECKLIST
 =========
-[3]
-(2) Implement the RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) method to draw a triangle with per-vertex normals. For now, ignore the texture coordinates and the input materialIndex parameter, and have the method return -1.
-(2) Impelement the RayMaterial::drawOpenGL (in Ray/rayScene.todo.cpp) method to draw the material properties.
-[3]
-[2]
-[2]
+total: 19
++7 (1 (boards), 3 (furniture), 1 (lights), 2 (mouse)) --> 26
+[3] cam, sphere, group
+[2] triangle
+[2] material
+[3] light
+[2] trans
+[2] callist
 (3) Implement triangle texture mapping. To do this you will have to:
 Modify the implementation of RayTriangle::drawOpenGL (in Ray/rayTriangle.todo.cpp) to specify the texture coordinates prior to specifying the vertex positions.
 Modify the implementation of RayMaterial::drawOpenGL (in Ray/RayScene.todo.cpp) method to enable and bind the texture if it is present.
 Modify the implementation of RayTexture::setUpOpenGL (in Ray/RayScene.todo.cpp) method to generate the texture handle.
-(1) Implement the RayBox::drawOpenGL (in Ray/rayBox.todo.cpp) method to draw a box.
-(1) Implement the RayCylinder::drawOpenGL (in Ray/rayCylinder.todo.cpp) method to draw a cylinder with bottom and top caps at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
-(1) Implement the RayCone::drawOpenGL (in Ray/rayCone.todo.cpp) method to draw a cone capped off at the bottom at the appropriate tesselation. (You may want to consider using the gluCylinder and gluDisk functions from the GLU library to assist you with this.)
-[2]
+[3]box, cyl, cone
+[2] mouse
 (2) Implement full scene anti-aliasing using the accumulation buffer. Hint: See the OpenGL Programming Guide for information about jittering.
 
     Generate a .ray file describing a room scene with:
