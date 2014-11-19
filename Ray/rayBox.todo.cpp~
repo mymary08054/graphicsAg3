@@ -21,6 +21,7 @@ int RayBox::drawOpenGL(int materialIndex){
     int mat = material->index;
 	if (mat != materialIndex)
 		material->drawOpenGL();
+		
 	int xlength = fabs(center[0]-length[0])*2;
 	int ylength = fabs(center[1]-length[1])*2;
 	int zlength = fabs(center[2]-length[2])*2;

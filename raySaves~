@@ -1,3 +1,7 @@
+#camera 40.0 60.0 40.0   -1.0 -1.0 -1.0   -1.0 1.0 -1.0   .523
+
+
+
 #light_num 3
 #light_spot 
     0  .5  .5
@@ -17,14 +21,14 @@
     3 -1 0
     .1 0 0 
     56 2
-
+===========
 roomBaords
 'ROOF'
 #shape_triangle 0
 	6 7 4
 #shape_triangle 0
 	6 4 5
-
+===========
 
 #vertex
 	-1  0  1

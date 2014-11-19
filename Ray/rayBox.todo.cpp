@@ -27,7 +27,7 @@ int RayBox::drawOpenGL(int materialIndex){
 	int zlength = fabs(center[2]-length[2])*2;
 	
 	glPushMatrix();
-    glTranslatef(-center[0], -center[1], -center[2]);	
+    glTranslatef(center[0], center[1], center[2]);	
     glScalef (xlength,ylength,zlength);
     glutSolidCube(1.0);
     glPopMatrix();	

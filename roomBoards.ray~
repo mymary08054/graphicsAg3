@@ -8,7 +8,7 @@
 	1.0 1.0 1.0 100
 	0.0 0.0 0.0
 	1.05
-	-1
+	0
 	!!
 #vertex_num 8
 #vertex
@@ -59,9 +59,9 @@
 	0 3 7
 
 #shape_triangle 0
-	6 2 1
+	6 1 2
 #shape_triangle 0
-	6 1 5
+	6 5 1
 
 #shape_triangle 0
 	6 7 3

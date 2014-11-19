@@ -1,0 +1,23 @@
+#texture_num 1
+#texture sample.jpg
+#material_num 1
+#material
+	0.0 0.0 0.0
+	0.3 0.3 0.3
+	0.1 0.1 0.5
+	1.0 1.0 1.0 100
+	0.0 0.0 0.0
+	1.05
+	0
+	!!
+#shape_box  0
+    0 3 0
+    1.5 2.5 1.5
+
+#shape_box  0
+    0 1.5 1
+    1.5 .5 -1.5
+    
+#shape_box  0
+    0 4 2
+    1.5 8 1.5
