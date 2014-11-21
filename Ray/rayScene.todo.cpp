@@ -185,6 +185,7 @@ Point3D RayScene::GetColor(Ray3D ray, int rDepth, Point3D cLimit) {
 // OpenGL stuff //
 //////////////////
 void RayMaterial::drawOpenGL(void) {
+
     GLfloat matDiffuse[] = {diffuse[0], diffuse[1], diffuse[2]};
     GLfloat matSpecular[] = {specular[0], specular[1], specular[2]};
     GLfloat matEmissive[] = {emissive[0], emissive[1], emissive[2]};
@@ -208,7 +209,10 @@ void RayMaterial::drawOpenGL(void) {
 			glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->img->width(), tex->img->height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, tex->img->getPixels());
 		}
+
 }
+
+
 /*
 void RayMaterial::turnOffLights(void) {
     GLfloat lightsOffArray[] = {0,0,0};

@@ -1,3 +1,5 @@
+#texture_num 1
+#texture bunnybg2.jpg
 #material_num 1
 #material
 	0.0 0.0 0.0

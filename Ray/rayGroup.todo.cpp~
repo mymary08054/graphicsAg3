@@ -103,27 +103,17 @@ int RayGroup::drawOpenGL(int materialIndex) {
 		GLint viewPort[4];
 		glGetIntegerv(GL_VIEWPORT, viewPort);
 		//iterate through shapes in group
-		if(lightsOn){
-		    for (int i = 0; i < sNum; i++) {
-			    glMatrixMode(GL_MODELVIEW);
-			    glPushMatrix();
-			    glMultMatrixf(transArray);
-			    shapes[i]->drawOpenGL(materialIndex);
-			    glPopMatrix();
-		    }
-		} else {
-		    for (int i = 0; i < sNum; i++) {
-			    glMatrixMode(GL_MODELVIEW);
-			    glPushMatrix();
-			    glMultMatrixf(transArray);
-			    shapes[i]->drawOpenGL(-1);
-			    glPopMatrix();
-		    }
-		}
+	    for (int i = 0; i < sNum; i++) {
+		    glMatrixMode(GL_MODELVIEW);
+		    glPushMatrix();
+		    glMultMatrixf(transArray);
+		    shapes[i]->drawOpenGL(materialIndex);
+		    glPopMatrix();
+	    }
 	}
-	else{
-	glCallList(openGLCallListID);
-	}
+	//else{
+	//glCallList(openGLCallListID);
+	//}
 	return -1;
 }
 

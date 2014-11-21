@@ -25,7 +25,7 @@ BoundingBox3D RayCone::setBoundingBox(void){
 int RayCone::drawOpenGL(int materialIndex){
     int mat = material->index;
 	if (mat != materialIndex)
-		//material->drawOpenGL();
+		material->drawOpenGL();
 	
 	glPushMatrix();
     glTranslatef(center[0], center[1]-(height/2), center[2]);	
@@ -36,6 +36,5 @@ int RayCone::drawOpenGL(int materialIndex){
     gluDisk(quadObj, 0.0f, radius, 30, 1);
     gluDeleteQuadric(quadObj);
     glPopMatrix();	
-	
 	return mat;
 }

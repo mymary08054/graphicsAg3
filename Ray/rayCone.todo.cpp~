@@ -23,12 +23,12 @@ BoundingBox3D RayCone::setBoundingBox(void){
 //////////////////
 #define CONE_SUBDIVISIONS 32
 int RayCone::drawOpenGL(int materialIndex){
-    int mat = material->index;
+    /*int mat = material->index;
 	if (mat != materialIndex)
-		//material->drawOpenGL();
+		material->drawOpenGL();
 	
 	glPushMatrix();
-    glTranslatef(-center[0], -center[1]-height/2, -center[2]);	
+    glTranslatef(center[0], center[1]-(height/2), center[2]);	
     glRotatef(90.0f, -1.0f, 0.0f, 0.0f); //rotate about x axis
 	GLUquadricObj* quadObj = gluNewQuadric();
 	gluCylinder(quadObj, radius, 0, height, CONE_SUBDIVISIONS, CONE_SUBDIVISIONS);
@@ -36,6 +36,21 @@ int RayCone::drawOpenGL(int materialIndex){
     gluDisk(quadObj, 0.0f, radius, 30, 1);
     gluDeleteQuadric(quadObj);
     glPopMatrix();	
-	
-	return mat;
+	return mat;*/
+	glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+int m = material->index;
+if (m != materialIndex) {
+    material->drawOpenGL();
+}
+
+glTranslatef(-center[0], -center[1], -center[2]);
+
+glBegin(GL_POLYGON);
+GLUquadricObj *obj = gluNewQuadric();
+gluCylinder(obj, this->radius, 0, this->height, 360, 360);
+glEnd();
+glDisable(GL_BLEND);
+
+return m;
 }

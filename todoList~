@@ -17,7 +17,8 @@
 #group_end
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+Right click to turn lights on or off....
+-first have it so that it recalls the scene but w/o the light propeerties...?
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 (3) Implement triangle texture mapping. To do this you will have to:

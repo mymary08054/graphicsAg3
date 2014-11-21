@@ -41,7 +41,7 @@ Generate a .ray file describing a room scene with:
 CHECKLIST
 =========
 total: 19
-+7 (1 (boards), 3 (furniture), 1 (lights), 2 (mouse)) --> 26
++7 (1 (boards), 3 (furniture), 1 (lights), 2 (mouse)) --> 24
 [3] cam, sphere, group
 [2] triangle
 [2] material
